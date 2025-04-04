@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Header Section */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 48px;
+            letter-spacing: 2px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .quote {
+            font-size: 24px;
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Header Button */
+        .search-btn {
+            background-color: #fff;
+            color: #4CAF50;
+            font-size: 18px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Main Content Section with Image */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 10%;
+            text-align: center;
+            background: url('https://img.freepik.com/free-photo/luxury-classic-modern-bedroom-suite-hotel_105762-1787.jpg') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+            height: 60vh;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin-top: -20px;
+        }
+
+        footer h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #bbb;
+        }
+
+        footer a {
+            color: #4CAF50;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #81C784;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 40px 5%;
+                margin-top: -30px;
+                height: auto;
+            }
+
+            header h1 {
+                font-size: 36px;
+            }
+
+            .quote {
+                font-size: 20px;
+            }
+
+            .search-btn {
+                padding: 10px 15px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome to HotelHub</h1>
+        <div class="quote">
+            "Experience the best of hospitality."
+        </div>
+        <!-- Added Search Button -->
+        <button class="search-btn" onclick="window.location.href='hotel_details.html'">Search Rooms</button>
+    </header>
+
+    <!-- Main Content Section with Image -->
+    <div class="main-content">
+        <!-- The content is replaced with an image as the background -->
+        <!-- No text content here, just the image set in the background -->
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <h3>About HotelHub</h3>
+        <p>HotelHub is committed to making your travel experience unforgettable. With over 100,000 properties listed across India, we provide you with the best choices and the most seamless booking process.</p>
+        <p>For any inquiries, reach out to us at: <a href="mailto:support@hotelhub.com">support@hotelhub.com</a></p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelHub - Room Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            background-image: url('https://www.travelandleisure.com/thmb/o7LEqLUpOtf0nIm7ErqGrsVA3yo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TAL-hotel-room-interior-bed-BOOKHOTEL0223-786eb1910382404a8806d1e1e8ed7716.jpg');
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 36px;
+        }
+
+        /* Search Form */
+        .search-form {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px auto;
+            max-width: 1200px;
+        }
+
+        .search-form input, .search-form select, .search-form button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .search-form button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Room List */
+        .room-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .room {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .room:hover {
+            transform: translateY(-10px);
+        }
+
+        .room img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .room h3 {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        .room p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .room .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .room .book-btn {
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .room .book-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Login Prompt */
+        .login-prompt {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-prompt button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-prompt button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>HotelHub - Find Your Perfect Stay</h1>
+    </header>
+
+    <!-- Search Form Section -->
+    <div class="search-form">
+        <input type="date" id="check-in" required>
+        <input type="date" id="check-out" required>
+        <input type="number" id="guests" placeholder="Guests" min="1" max="10">
+        <select id="room-type">
+            <option value="">Room Type</option>
+            <option value="single">Single</option>
+            <option value="double">Double</option>
+            <option value="suite">Suite</option>
+        </select>
+        <button onclick="searchRooms()">Search</button>
+    </div>
+
+    <!-- Room List Section -->
+    <div class="room-list" id="room-list">
+        <!-- Dynamically populated rooms will be inserted here -->
+    </div>
+
+    <!-- Login Prompt Modal -->
+    <div class="login-prompt" id="login-prompt">
+        <h3>Please log in to proceed with booking!</h3>
+        <button onclick="redirectToLogin()">Log In</button>
+    </div>
+
+    <script>
+        // Initialize date inputs with the current date
+        const today = new Date();
+        const currentMonth = today.getMonth();  // Current month
+        const currentDate = today.toISOString().split('T')[0];  // Current date in YYYY-MM-DD format
+        document.getElementById('check-in').setAttribute('min', currentDate);
+        document.getElementById('check-out').setAttribute('min', currentDate);
+
+        // Sample data for rooms (in a real app, this would be fetched from the server)
+        const roomsData = [
+            { type: 'single', price: 100, description: 'A cozy single room for one guest.', imgSrc: 'https://via.placeholder.com/300x200', available: true },
+            { type: 'double', price: 150, description: 'A spacious double room for two guests.', imgSrc: 'https://via.placeholder.com/300x200', available: true },
+            { type: 'suite', price: 250, description: 'A luxurious suite for a premium stay.', imgSrc: 'https://via.placeholder.com/300x200', available: true },
+            { type: 'single', price: 90, description: 'A simple, budget-friendly single room.', imgSrc: 'https://via.placeholder.com/300x200', available: false },
+            // Add more rooms as needed
+        ];
+
+        // Function to simulate searching rooms
+        function searchRooms() {
+            const checkInDate = document.getElementById('check-in').value;
+            const checkOutDate = document.getElementById('check-out').value;
+            const guests = document.getElementById('guests').value;
+            const roomType = document.getElementById('room-type').value;
+
+            if (!checkInDate || !checkOutDate) {
+                alert('Please select both check-in and check-out dates.');
+                return;
+            }
+
+            if (new Date(checkInDate) >= new Date(checkOutDate)) {
+                alert('Check-out date must be later than check-in date.');
+                return;
+            }
+
+            let filteredRooms = roomsData;
+
+            // Filter rooms based on user search criteria
+            if (roomType) {
+                filteredRooms = filteredRooms.filter(room => room.type === roomType);
+            }
+
+            // Render rooms
+            const roomList = document.getElementById('room-list');
+            roomList.innerHTML = ''; // Clear previous results
+            filteredRooms.forEach(room => {
+                const roomElement = document.createElement('div');
+                roomElement.classList.add('room');
+                roomElement.innerHTML = `
+                    <img src="${room.imgSrc}" alt="Room Image">
+                    <h3>${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Room</h3>
+                    <p>${room.description}</p>
+                    <p class="price">$${room.price} / night</p>
+                    ${room.available ? `<button class="book-btn" onclick="bookRoom()">Book Now</button>` : `<p>Currently unavailable</p>`}
+                `;
+                roomList.appendChild(roomElement);
+            });
+
+            // Format and display selected dates
+            displayFormattedDates(checkInDate, checkOutDate);
+        }
+
+        // Function to format dates to custom "Firstdate-Month-Date" format
+        function formatDate(date) {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const d = new Date(date);
+            return `${d.getDate()}-${months[d.getMonth()]}-${d.getFullYear()}`;
+        }
+
+        // Display the formatted dates
+        function displayFormattedDates(checkInDate, checkOutDate) {
+            const formattedCheckIn = formatDate(checkInDate);
+            const formattedCheckOut = formatDate(checkOutDate);
+            console.log(`Check-in: ${formattedCheckIn}, Check-out: ${formattedCheckOut}`);
+        }
+
+        // Function to simulate booking a room
+        function bookRoom() {
+            // Check if the user is logged in
+            const isLoggedIn = false; // Replace with actual login check logic
+
+            if (isLoggedIn) {
+                alert('Booking confirmed!');
+            } else {
+                // Show login prompt if not logged in
+                document.getElementById('login-prompt').style.display = 'block';
+            }
+        }
+
+        // Function to redirect user to login page
+        function redirectToLogin() {
+            window.location.href = 'login.html'; // Adjust this URL to your login page
+        }
+    </script>
+
+</body>
+</html>
